@@ -31,19 +31,32 @@ PALETTE = [(16, 233), (34, 17), (55, 18), (76, 19), (97, 20), (118, 25), (139, 2
 
 GAP = 2  # колонок между статуей и надписью
 
+#: Вертикальный градиент надписи (цвет на строку, сверху вниз): белый -> синий,
+#: как блики на статуе.
+WORD_GRADIENT = (15, 117, 75, 33, 27)
+
+#: Блочный шрифт 5 строк: буква -> строки из «█» и пробелов (ширина у букв своя).
+BLOCK_FONT = {
+    "P": ("████", "█  █", "████", "█   ", "█   "),
+    "L": ("█   ", "█   ", "█   ", "█   ", "████"),
+    "A": (" ██ ", "█  █", "████", "█  █", "█  █"),
+    "Y": ("█   █", " █ █ ", "  █  ", "  █  ", "  █  "),
+    "E": ("████", "█   ", "███ ", "█   ", "████"),
+    "R": ("███ ", "█  █", "███ ", "█ █ ", "█  █"),
+    "O": (" ██ ", "█  █", "█  █", "█  █", " ██ "),
+    "K": ("█  █", "█ █ ", "██  ", "█ █ ", "█  █"),
+    "C": (" ███", "█   ", "█   ", "█   ", " ███"),
+    "D": ("███ ", "█  █", "█  █", "█  █", "███ "),
+    "I": ("███", " █ ", " █ ", " █ ", "███"),
+    "N": ("█   █", "██  █", "█ █ █", "█  ██", "█   █"),
+}
+
 _CYAN = "\x1b[38;5;51m"
-_RED = "\x1b[38;5;196m"
 _GREY = "\x1b[38;5;245m"
 _RESET = "\x1b[0m"
 
-#: Текстовый блок справа от статуи: (цветной текст, видимая ширина).
-SIDE_TEXT: list[tuple[str, int]] = [
-    (f"{_CYAN}█▀█ █   ▄▀█ █▄█ █▀▀ █▀█ █▀█ █▄▀{_RESET}", 31),
-    (f"{_CYAN}█▀▀ █▄▄ █▀█  █  ██▄ █▀▄ █▄█ █ █{_RESET}", 31),
-    ("", 0),
-    (f"{_RED}█▀▀ ▄▀█ █▀█ █▀▄ █ █▄ █ ▄▀█ █{_RESET}", 28),
-    (f"{_RED}█▄▄ █▀█ █▀▄ █▄▀ █ █ ▀█ █▀█ █▄▄{_RESET}", 30),
-    ("", 0),
+#: Подписи под надписью: (цветной текст, видимая ширина).
+TAGLINES: list[tuple[str, int]] = [
     (f"{_GREY}бот-комбайн для продавцов Playerok{_RESET}", 34),
     (f"{_GREY}· /menu в Telegram{_RESET}", 18),
     (f"{_GREY}Создатель:{_RESET} {_CYAN}https://t.me/Scwee_xz{_RESET}", 32),
@@ -98,10 +111,36 @@ def render() -> str:
     return _attach_side_text(lines)
 
 
+def _render_word(word: str) -> list[tuple[str, int]]:
+    """
+    Слово блочным шрифтом с вертикальным градиентом статуи (белый -> синий).
+
+    Чёткие «█»-буквы вместо рампы: читаемо в любом терминальном шрифте.
+    """
+    glyphs = [BLOCK_FONT[ch] for ch in word]
+    lines: list[tuple[str, int]] = []
+    for row in range(len(WORD_GRADIENT)):
+        text = " ".join(glyph[row] for glyph in glyphs)
+        colored = f"\x1b[38;5;{WORD_GRADIENT[row]}m{text}{_RESET}"
+        lines.append((colored, len(text)))
+    return lines
+
+
+def _side_text() -> list[tuple[str, int]]:
+    """Надпись PLAYEROK/CARDINAL в стиле статуи + серые подписи."""
+    block = _render_word("PLAYEROK")
+    block.append(("", 0))
+    block.extend(_render_word("CARDINAL"))
+    block.append(("", 0))
+    block.extend(TAGLINES)
+    return block
+
+
 def _attach_side_text(lines: list[str]) -> str:
     """Пристраивает надпись/подписи справа от статуи, вертикально по центру."""
-    start = max(0, (len(lines) - len(SIDE_TEXT)) // 2)
-    for offset, (text, width) in enumerate(SIDE_TEXT):
+    side = _side_text()
+    start = max(0, (len(lines) - len(side)) // 2)
+    for offset, (text, width) in enumerate(side):
         if not text:
             continue
         row = start + offset
