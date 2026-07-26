@@ -13,10 +13,12 @@ STRINGS = {
 
     # --- Main menu ---
     "menu_title": (
-        "🐦 <b>PlayerokCardinal</b>\n\n"
-        "👤 Account: <b>{username}</b>\n"
-        "💰 Balance: <b>{balance}</b>\n"
-        "⏱ Uptime: <b>{uptime}</b>"
+        "🐦 <b>PlayerokCardinal</b> <code>v{version}</code>\n"
+        "━━━━━━━━━━━━━━━━━━\n"
+        "👤 Account: <b>{username}</b> {online}\n"
+        "├ 💰 Balance: <b>{balance}</b>\n"
+        "├ 🧩 Modules: <b>{modules_on}/{modules_total}</b>\n"
+        "└ ⏱ Uptime: <b>{uptime}</b>"
     ),
     "menu_section_toggles": "🎛 Global toggles",
     "menu_section_stats": "📈 Statistics",
@@ -40,7 +42,10 @@ STRINGS = {
     "module_toggled_off": "Module \"{module}\" disabled.",
 
     # --- Global toggles ---
-    "gl_title": "🎛 <b>Global toggles</b>\n\nTap a module to enable or disable it:",
+    "gl_title": (
+        "🎛 <b>Global toggles</b> — enabled <b>{on}/{total}</b>\n\n"
+        "Tap a module to enable or disable it:"
+    ),
     "gl_btn_greeting_text": "✏️ Greeting text",
     "gl_enter_greeting": (
         "Send the new greeting text.\n"
@@ -50,7 +55,7 @@ STRINGS = {
     "gl_greeting_saved": "✅ Greeting text saved.",
 
     # --- Statistics ---
-    "st_title": "📈 <b>Sales statistics</b> (last 7 days):",
+    "st_title": "📈 <b>Sales statistics</b> — last 7 days\n━━━━━━━━━━━━━━━━━━",
     "st_line": "<code>{day} {bar}</code> <b>{count}</b> pcs. / <b>{revenue}</b>",
     "st_empty": "No sales in the last 7 days.",
     "st_total_week": "Total for 7 days: <b>{count}</b> pcs. for <b>{revenue}</b>",
@@ -59,6 +64,7 @@ STRINGS = {
     "st_bot_delivered": "Items delivered: <b>{today}</b> / <b>{week}</b> / <b>{total}</b>",
     "st_bot_raised": "Lots raised: <b>{today}</b> / <b>{week}</b> / <b>{total}</b>",
     "st_bot_responses": "Auto-replies: <b>{today}</b> / <b>{week}</b> / <b>{total}</b>",
+    "st_bot_postsale": "Post-sale messages: <b>{today}</b> / <b>{week}</b> / <b>{total}</b>",
 
     # --- Auto-delivery ---
     "ad_title": "📦 <b>Auto-delivery</b>\n\nLots and stock:",
@@ -67,12 +73,12 @@ STRINGS = {
     "ad_btn_add_lot": "➕ Add lot",
     "ad_lot_title": (
         "📦 Lot <b>{name}</b>\n"
-        "Stock file: <code>{stock_file}</code>\n"
-        "In stock: <b>{stock}</b> pcs.\n"
-        "Auto-restore: {restore}\n"
-        "Deactivate when empty: {deactivate}\n"
-        "Own delivery text: {own_text}\n"
-        "Unpublish when stock is empty: {auto_deact}"
+        "├ 🗂 Stock file: <code>{stock_file}</code>\n"
+        "├ 📦 In stock: <b>{stock}</b> pcs.\n"
+        "├ ♻️ Auto-restore: {restore}\n"
+        "├ 🛑 Deactivate when empty: {deactivate}\n"
+        "├ ✏️ Own delivery text: {own_text}\n"
+        "└ 🛑 Unpublish when stock is empty: {auto_deact}"
     ),
     "ad_btn_view_stock": "👀 View stock",
     "ad_stock_view_title": "📦 <b>Stock \"{name}\"</b> — items: <b>{total}</b>",
@@ -152,6 +158,21 @@ STRINGS = {
     "ar_deleted": "🗑 Command <code>{command}</code> deleted.",
     "ar_missing": "Command not found (config may have changed). Re-open the section.",
     "ar_builtin_commands_response": "Available commands:\n{commands}",
+    "ar_delete_confirm": "🗑 <b>Delete command?</b>\n\nCommand <code>{command}</code> will be removed from the auto-responder.",
+    "ar_btn_delete_yes": "🗑 Yes, delete",
+    "ar_btn_test": "🧪 Test reply",
+    "ar_test_prompt": (
+        "🧪 Send a message \"as a buyer\" — I'll show how the auto-responder would reply.\n"
+        "Nothing will be sent to buyers."
+    ),
+    "ar_test_no_match": "🧪 No command matches this message — the bot would stay silent.",
+    "ar_test_result": (
+        "🧪 <b>Auto-responder test</b>\n\n"
+        "Buyer's message:\n<code>{text}</code>\n\n"
+        "Matched command: <code>{command}</code>\n"
+        "The bot would reply:\n<code>{response}</code>\n\n"
+        "Nothing was sent to the buyer."
+    ),
 
     # --- Blacklist ---
     "bl_title": "🚫 <b>Blacklist</b>\n\nThese buyers are ignored by auto-response and greeting, and their purchases trigger a warning.\nTap a username to remove it:",
@@ -167,11 +188,12 @@ STRINGS = {
 
     # --- Daily digest ---
     "digest_text": (
-        "📊 <b>Digest for {date}</b>\n\n"
-        "🛒 Sales: <b>{sales}</b>\n"
-        "💰 Revenue: <b>{revenue}</b>\n"
-        "💳 Balance: <b>{balance}</b>\n"
-        "⏱ Uptime: <b>{uptime}</b>\n\n"
+        "📊 <b>Digest for {date}</b>\n"
+        "━━━━━━━━━━━━━━━━━━\n"
+        "├ 🛒 Sales: <b>{sales}</b>\n"
+        "├ 💰 Revenue: <b>{revenue}</b>\n"
+        "├ 💳 Balance: <b>{balance}</b>\n"
+        "└ ⏱ Uptime: <b>{uptime}</b>\n\n"
         "📦 Stock left:\n{stocks}"
     ),
     "digest_stock_line": "• {name} — <b>{stock}</b> pcs.",
@@ -179,7 +201,7 @@ STRINGS = {
     "digest_unavailable": "The digest module is unavailable.",
 
     # --- Notifications ---
-    "nt_title": "🔔 <b>Notifications</b>\n\nTap to toggle:",
+    "nt_title": "🔔 <b>Notifications</b> — enabled <b>{on}/{total}</b>\n\nTap to toggle:",
     "nt_new_deal": "New deal",
     "nt_item_paid": "Item paid",
     "nt_delivery": "Delivery",
@@ -201,9 +223,9 @@ STRINGS = {
     # --- Notification texts ---
     "notif_started": (
         "🐦 <b>PlayerokCardinal started</b>\n"
-        "👤 Account: <b>{username}</b>\n"
-        "💰 Balance: <b>{balance}</b>\n"
-        "🧩 Modules: {modules}"
+        "├ 👤 Account: <b>{username}</b>\n"
+        "├ 💰 Balance: <b>{balance}</b>\n"
+        "└ 🧩 Modules: {modules}"
     ),
     "notif_new_deal": "🛒 <b>New deal</b>\nItem: {item}\nBuyer: {buyer}\nStatus: {status}",
     "notif_item_paid": "💸 <b>Item paid</b>\nItem: {item}\nBuyer: {buyer}",
@@ -220,6 +242,23 @@ STRINGS = {
         "Item: {item}\nNeed: {price}\nAvailable: {available}"
     ),
     "notif_error": "🚨 <b>Cardinal error</b>\n<code>{error}</code>",
+    "err_hint_antibot": (
+        "💡 Looks like an anti-bot check (DDoS-Guard/Cloudflare). Add fresh <code>__ddg5_</code> "
+        "cookies from your browser or configure a proxy (<code>[playerok]</code> "
+        "in <code>configs/main.toml</code>)."
+    ),
+    "err_hint_auth": (
+        "💡 The Playerok token seems expired. Copy a fresh token from your browser and send it "
+        "with <code>/token &lt;value&gt;</code>."
+    ),
+    "err_hint_proxy": (
+        "💡 Looks like a proxy problem. Check <code>[playerok] proxy</code> "
+        "in <code>configs/main.toml</code> or disable the proxy temporarily."
+    ),
+    "err_hint_timeout": (
+        "💡 Looks like a network problem (timeout). Check your internet and proxy; for a slow "
+        "proxy increase <code>[playerok] requests_timeout</code>."
+    ),
     "notif_stock_empty": (
         "📭 <b>Stock is empty</b>\nItem: {item}\n"
         "Refill it to keep auto-delivery working."

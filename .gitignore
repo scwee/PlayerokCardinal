@@ -12,4 +12,4 @@ _jsbundle/
 _compare_report.json
 tmp_cookies.txt
 *.egg-info/
-.pytest_cache/
+.pytest_cache/tests/

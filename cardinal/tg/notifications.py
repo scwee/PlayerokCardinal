@@ -9,10 +9,38 @@ reply'ем — Cardinal перешлёт текст в соответствую�
 from __future__ import annotations
 
 import html
+import time
 
 from loguru import logger
 
 from playerokapi.common.enums import EventTypes
+
+#: Максимум записей «TG-сообщение → чат Playerok» для ответов reply'ем.
+#: Старые вытесняются — иначе на нагруженном аккаунте карта растёт бесконечно.
+REPLY_MAP_LIMIT = 500
+
+#: Одинаковый текст ошибки не отправляется админам чаще, чем раз в этот интервал:
+#: зациклившаяся сетевая ошибка Runner иначе спамит каждые requests_delay секунд.
+ERROR_DEDUP_SECONDS = 3600.0
+
+#: Подстроки текста ошибки → ключ локали с подсказкой, что делать.
+#: Порядок важен: антибот проверяется раньше 403 (страница Cloudflare отдаёт 403),
+#: авторизация — раньше общих сетевых причин.
+_ERROR_HINTS: tuple[tuple[tuple[str, ...], str], ...] = (
+    (("cloudflare", "ddos-guard", "ddos guard", "антибот", "bot check"), "err_hint_antibot"),
+    (("401", "403", "unauthorized", "forbidden", "unauthenticated"), "err_hint_auth"),
+    (("proxy", "tunnel", "socks"), "err_hint_proxy"),
+    (("timed out", "timeout", "curl: (28)", "connection", "resolve host"), "err_hint_timeout"),
+)
+
+
+def error_hint_key(error_text: str) -> str | None:
+    """Ключ локали с подсказкой по тексту ошибки (`None`, если причина не распознана)."""
+    lowered = error_text.lower()
+    for needles, key in _ERROR_HINTS:
+        if any(needle in lowered for needle in needles):
+            return key
+    return None
 
 
 def _esc(value) -> str:
@@ -32,6 +60,8 @@ class Notifier:
         #: (tg_chat_id, tg_message_id) уведомлений о протухшей сессии — reply на них
         #: воспринимается как новый token/cookies (см. `handlers/session.py`).
         self.session_expired_messages: set[tuple[int, int]] = set()
+        #: Текст ошибки -> время последней отправки (для дедупликации повторов).
+        self._recent_errors: dict[str, float] = {}
 
     @property
     def _toggles(self):
@@ -47,6 +77,9 @@ class Notifier:
                 continue
             if remember_chat is not None:
                 self.reply_map[(sent.chat.id, sent.message_id)] = remember_chat
+                # dict хранит порядок вставки — вытесняем самые старые записи.
+                while len(self.reply_map) > REPLY_MAP_LIMIT:
+                    self.reply_map.pop(next(iter(self.reply_map)))
 
     async def send_text(self, text: str) -> None:
         """Отправляет произвольный текст всем админам (используется модулями, например сводкой)."""
@@ -190,8 +223,28 @@ class Notifier:
         ))
 
     async def notify_error(self, error_text: str) -> None:
-        if self._toggles.errors:
-            await self._send_all(self.cardinal.l10n("notif_error", error=_esc(error_text)))
+        """
+        Ошибка Cardinal: текст + подсказка, что делать (если причина распознана).
+
+        Одинаковый текст не шлётся чаще раза в `ERROR_DEDUP_SECONDS` — зациклившаяся
+        ошибка Runner иначе будит админа на каждом опросе.
+        """
+        if not self._toggles.errors:
+            return
+        now = time.monotonic()
+        last_sent = self._recent_errors.get(error_text)
+        if last_sent is not None and now - last_sent < ERROR_DEDUP_SECONDS:
+            return
+        self._recent_errors = {text: ts for text, ts in self._recent_errors.items()
+                               if now - ts < ERROR_DEDUP_SECONDS}
+        self._recent_errors[error_text] = now
+
+        l10n = self.cardinal.l10n
+        text = l10n("notif_error", error=_esc(error_text))
+        hint = error_hint_key(error_text)
+        if hint is not None:
+            text += "\n\n" + l10n(hint)
+        await self._send_all(text)
 
     async def notify_session_expired(self, cause: str) -> None:
         """

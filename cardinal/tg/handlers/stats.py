@@ -8,7 +8,13 @@ from aiogram import F, Router
 from aiogram.types import CallbackQuery
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from ...stats_store import ACTION_AUTORESPONSE, ACTION_DELIVERY, ACTION_GREETING, ACTION_RAISE
+from ...stats_store import (
+    ACTION_AUTORESPONSE,
+    ACTION_DELIVERY,
+    ACTION_GREETING,
+    ACTION_POSTSALE,
+    ACTION_RAISE,
+)
 from .common import nav_row, safe_edit
 
 router = Router(name="stats")
@@ -49,6 +55,7 @@ def build_bot_work_lines(cardinal) -> list[str]:
         ("st_bot_delivered", (ACTION_DELIVERY,)),
         ("st_bot_raised", (ACTION_RAISE,)),
         ("st_bot_responses", (ACTION_AUTORESPONSE, ACTION_GREETING)),
+        ("st_bot_postsale", (ACTION_POSTSALE,)),
     ):
         lines.append(l10n(
             key,

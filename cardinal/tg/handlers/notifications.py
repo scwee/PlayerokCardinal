@@ -25,7 +25,8 @@ def build_notifications_menu(cardinal) -> tuple[str, object]:
     builder.row(InlineKeyboardButton(text=l10n("nt_btn_all_on"), callback_data="nt:all:1"),
                 InlineKeyboardButton(text=l10n("nt_btn_all_off"), callback_data="nt:all:0"))
     builder.row(*nav_row(l10n))
-    return l10n("nt_title"), builder.as_markup()
+    enabled = sum(1 for key in NOTIFICATION_KEYS if getattr(toggles, key))
+    return l10n("nt_title", on=enabled, total=len(NOTIFICATION_KEYS)), builder.as_markup()
 
 
 @router.callback_query(F.data == "nt")

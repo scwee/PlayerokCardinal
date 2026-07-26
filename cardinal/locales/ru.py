@@ -13,10 +13,12 @@ STRINGS = {
 
     # --- Главное меню ---
     "menu_title": (
-        "🐦 <b>PlayerokCardinal</b>\n\n"
-        "👤 Аккаунт: <b>{username}</b>\n"
-        "💰 Баланс: <b>{balance}</b>\n"
-        "⏱ Аптайм: <b>{uptime}</b>"
+        "🐦 <b>PlayerokCardinal</b> <code>v{version}</code>\n"
+        "━━━━━━━━━━━━━━━━━━\n"
+        "👤 Аккаунт: <b>{username}</b> {online}\n"
+        "├ 💰 Баланс: <b>{balance}</b>\n"
+        "├ 🧩 Модули: <b>{modules_on}/{modules_total}</b>\n"
+        "└ ⏱ Аптайм: <b>{uptime}</b>"
     ),
     "menu_section_toggles": "🎛 Глобальные переключатели",
     "menu_section_stats": "📈 Статистика",
@@ -40,7 +42,10 @@ STRINGS = {
     "module_toggled_off": "Модуль «{module}» выключен.",
 
     # --- Глобальные переключатели ---
-    "gl_title": "🎛 <b>Глобальные переключатели</b>\n\nНажмите на модуль, чтобы включить или выключить его:",
+    "gl_title": (
+        "🎛 <b>Глобальные переключатели</b> — включено <b>{on}/{total}</b>\n\n"
+        "Нажмите на модуль, чтобы включить или выключить его:"
+    ),
     "gl_btn_greeting_text": "✏️ Текст приветствия",
     "gl_enter_greeting": (
         "Пришлите новый текст приветствия.\n"
@@ -50,7 +55,7 @@ STRINGS = {
     "gl_greeting_saved": "✅ Текст приветствия сохранён.",
 
     # --- Статистика ---
-    "st_title": "📈 <b>Статистика продаж</b> (последние 7 дней):",
+    "st_title": "📈 <b>Статистика продаж</b> — последние 7 дней\n━━━━━━━━━━━━━━━━━━",
     "st_line": "<code>{day} {bar}</code> <b>{count}</b> шт. / <b>{revenue}</b>",
     "st_empty": "За последние 7 дней продаж не было.",
     "st_total_week": "Итого за 7 дней: <b>{count}</b> шт. на <b>{revenue}</b>",
@@ -59,6 +64,7 @@ STRINGS = {
     "st_bot_delivered": "Выдано товаров: <b>{today}</b> / <b>{week}</b> / <b>{total}</b>",
     "st_bot_raised": "Поднятий лотов: <b>{today}</b> / <b>{week}</b> / <b>{total}</b>",
     "st_bot_responses": "Автоответов: <b>{today}</b> / <b>{week}</b> / <b>{total}</b>",
+    "st_bot_postsale": "Послепродажных сообщений: <b>{today}</b> / <b>{week}</b> / <b>{total}</b>",
 
     # --- Авто-выдача ---
     "ad_title": "📦 <b>Авто-выдача</b>\n\nЛоты и остатки на складах:",
@@ -67,12 +73,12 @@ STRINGS = {
     "ad_btn_add_lot": "➕ Добавить лот",
     "ad_lot_title": (
         "📦 Лот <b>{name}</b>\n"
-        "Склад: <code>{stock_file}</code>\n"
-        "Остаток: <b>{stock}</b> шт.\n"
-        "Автовосстановление: {restore}\n"
-        "Деактивация при пустом складе: {deactivate}\n"
-        "Свой текст выдачи: {own_text}\n"
-        "Снимать с публикации при пустом складе: {auto_deact}"
+        "├ 🗂 Склад: <code>{stock_file}</code>\n"
+        "├ 📦 Остаток: <b>{stock}</b> шт.\n"
+        "├ ♻️ Автовосстановление: {restore}\n"
+        "├ 🛑 Деактивация при пустом складе: {deactivate}\n"
+        "├ ✏️ Свой текст выдачи: {own_text}\n"
+        "└ 🛑 Снимать с публикации при пустом складе: {auto_deact}"
     ),
     "ad_btn_view_stock": "👀 Показать склад",
     "ad_stock_view_title": "📦 <b>Склад «{name}»</b> — позиций: <b>{total}</b>",
@@ -152,6 +158,21 @@ STRINGS = {
     "ar_deleted": "🗑 Команда <code>{command}</code> удалена.",
     "ar_missing": "Команда не найдена (возможно, конфиг изменился). Откройте раздел заново.",
     "ar_builtin_commands_response": "Доступные команды:\n{commands}",
+    "ar_delete_confirm": "🗑 <b>Удалить команду?</b>\n\nКоманда <code>{command}</code> будет убрана из автоответчика.",
+    "ar_btn_delete_yes": "🗑 Да, удалить",
+    "ar_btn_test": "🧪 Тест ответа",
+    "ar_test_prompt": (
+        "🧪 Пришлите сообщение «от покупателя» — покажу, как ответил бы автоответчик.\n"
+        "Покупателям ничего не отправится."
+    ),
+    "ar_test_no_match": "🧪 Ни одна команда не подходит под это сообщение — бот бы промолчал.",
+    "ar_test_result": (
+        "🧪 <b>Тест автоответчика</b>\n\n"
+        "Сообщение покупателя:\n<code>{text}</code>\n\n"
+        "Сработала команда: <code>{command}</code>\n"
+        "Бот ответил бы:\n<code>{response}</code>\n\n"
+        "Покупателю ничего не отправлено."
+    ),
 
     # --- Чёрный список ---
     "bl_title": "🚫 <b>Чёрный список</b>\n\nЭтих покупателей игнорируют автоответчик и приветствие, а о их покупках приходит предупреждение.\nНажмите на ник, чтобы убрать из списка:",
@@ -167,11 +188,12 @@ STRINGS = {
 
     # --- Сводка дня ---
     "digest_text": (
-        "📊 <b>Сводка за {date}</b>\n\n"
-        "🛒 Продаж: <b>{sales}</b>\n"
-        "💰 Выручка: <b>{revenue}</b>\n"
-        "💳 Баланс: <b>{balance}</b>\n"
-        "⏱ Аптайм: <b>{uptime}</b>\n\n"
+        "📊 <b>Сводка за {date}</b>\n"
+        "━━━━━━━━━━━━━━━━━━\n"
+        "├ 🛒 Продаж: <b>{sales}</b>\n"
+        "├ 💰 Выручка: <b>{revenue}</b>\n"
+        "├ 💳 Баланс: <b>{balance}</b>\n"
+        "└ ⏱ Аптайм: <b>{uptime}</b>\n\n"
         "📦 Остатки складов:\n{stocks}"
     ),
     "digest_stock_line": "• {name} — <b>{stock}</b> шт.",
@@ -179,7 +201,7 @@ STRINGS = {
     "digest_unavailable": "Модуль сводки недоступен.",
 
     # --- Уведомления ---
-    "nt_title": "🔔 <b>Уведомления</b>\n\nНажмите, чтобы переключить:",
+    "nt_title": "🔔 <b>Уведомления</b> — включено <b>{on}/{total}</b>\n\nНажмите, чтобы переключить:",
     "nt_new_deal": "Новая сделка",
     "nt_item_paid": "Оплата лота",
     "nt_delivery": "Выдача товара",
@@ -201,9 +223,9 @@ STRINGS = {
     # --- Тексты уведомлений ---
     "notif_started": (
         "🐦 <b>PlayerokCardinal запущен</b>\n"
-        "👤 Аккаунт: <b>{username}</b>\n"
-        "💰 Баланс: <b>{balance}</b>\n"
-        "🧩 Модули: {modules}"
+        "├ 👤 Аккаунт: <b>{username}</b>\n"
+        "├ 💰 Баланс: <b>{balance}</b>\n"
+        "└ 🧩 Модули: {modules}"
     ),
     "notif_new_deal": "🛒 <b>Новая сделка</b>\nЛот: {item}\nПокупатель: {buyer}\nСтатус: {status}",
     "notif_item_paid": "💸 <b>Лот оплачен</b>\nЛот: {item}\nПокупатель: {buyer}",
@@ -220,6 +242,23 @@ STRINGS = {
         "Лот: {item}\nНужно: {price}\nДоступно: {available}"
     ),
     "notif_error": "🚨 <b>Ошибка Cardinal</b>\n<code>{error}</code>",
+    "err_hint_antibot": (
+        "💡 Похоже на антибот-проверку (DDoS-Guard/Cloudflare). Добавьте свежие cookies "
+        "<code>__ddg5_</code> из браузера или подключите прокси (<code>[playerok]</code> "
+        "в <code>configs/main.toml</code>)."
+    ),
+    "err_hint_auth": (
+        "💡 Похоже, токен Playerok протух. Скопируйте свежий token из браузера и отправьте "
+        "командой <code>/token &lt;значение&gt;</code>."
+    ),
+    "err_hint_proxy": (
+        "💡 Похоже на проблему с прокси. Проверьте <code>[playerok] proxy</code> "
+        "в <code>configs/main.toml</code> или временно отключите прокси."
+    ),
+    "err_hint_timeout": (
+        "💡 Похоже на сетевую проблему (таймаут). Проверьте интернет и прокси; для медленного "
+        "прокси увеличьте <code>[playerok] requests_timeout</code>."
+    ),
     "notif_stock_empty": (
         "📭 <b>Склад пуст</b>\nЛот: {item}\n"
         "Пополните склад, чтобы авто-выдача продолжила работать."
