@@ -3,7 +3,7 @@
 Формат — [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 Версия бота хранится в `cardinal/__init__.py` (`__version__`); версия библиотеки `playerokapi` — в `pyproject.toml`.
 
-## [Unreleased]
+## [1.2.0] - 27.07.2026
 
 ### Добавлено
 
